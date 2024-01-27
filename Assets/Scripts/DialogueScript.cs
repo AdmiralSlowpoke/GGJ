@@ -13,22 +13,25 @@ public class DialogueScript : MonoBehaviour
     public Story story;
     public GameObject buttonLocation;
     public Button prefabButton;
-
     [SerializeField]
     private TextAsset ink = null;
 
+    [SerializeField]
+    private Sprite padge,papets,steve,pikachu,shlepa;
+
+    private bool textRunning = false;
     public void Start()
     {
         story = new Story(ink.text);
     }
     public void Update()
     {
-        if (Input.GetMouseButtonDown(0)&&story.canContinue)
+        if (Input.GetMouseButtonDown(0)&&story.canContinue&&!textRunning)
         {
             string text = story.Continue();
             text = text.Trim();
-            dialogueText.text = text;
-            if (story.currentTags.Count > 0) handleTag(story.currentTags[0]);
+            StartCoroutine(AppearingText(text));
+            if (story.currentTags.Count > 0) handleTag(story.currentTags);
             if (story.currentChoices.Count > 0)
             {
                 for(int i = 0; i < story.currentChoices.Count; i++)
@@ -44,24 +47,56 @@ public class DialogueScript : MonoBehaviour
                 }
             }
         }
-    }
-    void handleTag(string currentTag)
-    {
-        Debug.Log(currentTag);
-        switch (currentTag)
+        else if (Input.GetMouseButtonDown(0) && textRunning)
         {
-            case "speaker: Papetc":
-                characterName.text = "Папич";
-                break;
-            case "speaker: Padge":
-                characterName.text = "Пиджак";
-                break;
-            case "speaker: Shlepa":
-                characterName.text = "Шлёпа";
-                break;
-            default:
-                characterName.text = "Опять прогер чорт";
-                break;
+            StopAllCoroutines();
+            dialogueText.text = story.currentText.Trim();
+            textRunning = false;
+        }
+    }
+    void handleTag(List<string> currentTags)
+    {
+        string currentTag = "";
+        foreach(string tag in currentTags)
+        {
+            if (tag.Contains("speaker") || tag.Contains("концовка"))
+                currentTag = tag;
+            else if (tag.Contains("sound")) Debug.Log(tag);
+        }
+        if (currentTag.Contains("speaker"))
+        {
+            switch (currentTag)
+            {
+                case "speaker: Papetc":
+                    characterTalkingSprite.sprite = papets;
+                    characterName.text = "Виталик Артас";
+                    break;
+                case "speaker: Padge":
+                    characterName.text = "Пиджак";
+                    break;
+                case "speaker: Shlepa":
+                    characterTalkingSprite.sprite = shlepa;
+                    characterName.text = "Шлёпа";
+                    break;
+                case "speaker: Giga":
+                    characterTalkingSprite.sprite = pikachu;
+                    characterName.text = "Гигачу";
+                    break;
+                case "speaker: Stuf":
+                    characterTalkingSprite.sprite = steve;
+                    characterName.text = "Стуф";
+                    break;
+                default:
+                    characterName.text = "Опять прогер чорт";
+                    break;
+            }
+        }
+        else if (currentTag.Contains("концовка"))
+        {
+            /*switch (currentTag)
+            {
+                case ""
+            }*/
         }
     }
     void OnClickChoiseButton(Choice choice)
@@ -77,5 +112,17 @@ public class DialogueScript : MonoBehaviour
         {
             Destroy(btn.gameObject);
         }
+    }
+    IEnumerator AppearingText(string text)
+    {
+        string temp = "";
+        textRunning = true;
+        for(int i = 0; i < text.Length; i++)
+        {
+            temp += text[i];
+            dialogueText.text = temp;
+            yield return new WaitForSeconds(0.03f);
+        }
+        textRunning = false;
     }
 }

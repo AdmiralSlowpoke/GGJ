@@ -317,17 +317,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041F\u0430\u043F\u0438\u0447"
+  m_text: "\u0410\u0440\u0442\u0430\u0441"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 101a62a3b4787cc4582b7fd90fec4fea, type: 2}
-  m_sharedMaterial: {fileID: -3884826758427492352, guid: 101a62a3b4787cc4582b7fd90fec4fea, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d0f60092b97c1584398f2883b7396d19, type: 2}
+  m_sharedMaterial: {fileID: -840166572311779965, guid: d0f60092b97c1584398f2883b7396d19, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -529,15 +529,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 101a62a3b4787cc4582b7fd90fec4fea, type: 2}
-  m_sharedMaterial: {fileID: -3884826758427492352, guid: 101a62a3b4787cc4582b7fd90fec4fea, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d0f60092b97c1584398f2883b7396d19, type: 2}
+  m_sharedMaterial: {fileID: -840166572311779965, guid: d0f60092b97c1584398f2883b7396d19, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -557,9 +557,9 @@ MonoBehaviour:
   m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 36
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
@@ -638,8 +638,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 296, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 343, y: 74.162735}
+  m_SizeDelta: {x: 0, y: 148.3254}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &609052508
 MonoBehaviour:
@@ -866,7 +866,12 @@ MonoBehaviour:
   characterTalkingSprite: {fileID: 609052508}
   buttonLocation: {fileID: 38036107}
   prefabButton: {fileID: 7787218063722079588, guid: 1afd00a0f56b7cf42bae2596e0c32967, type: 3}
-  ink: {fileID: 4900000, guid: 763180759aab698419dd377c0ee4a989, type: 3}
+  ink: {fileID: 4900000, guid: 7cdbb236375ff99488b180531e3c8757, type: 3}
+  padge: {fileID: 21300000, guid: 9a84feb318656fd44903e2f6642f4a94, type: 3}
+  papets: {fileID: 21300000, guid: 3aaeaaaf1ae1ddc4a86a6cc6763c0b84, type: 3}
+  steve: {fileID: 21300000, guid: 66709234b9689e049816326dd8c37f13, type: 3}
+  pikachu: {fileID: 21300000, guid: ddbd04bfbe368d347b925faf9edf5187, type: 3}
+  shlepa: {fileID: 21300000, guid: d7096db872e51c941979dec89a4b096a, type: 3}
 --- !u!1 &1456548335
 GameObject:
   m_ObjectHideFlags: 0
@@ -919,7 +924,7 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
-  m_ScreenMatchMode: 0
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
