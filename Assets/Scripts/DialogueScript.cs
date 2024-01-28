@@ -16,7 +16,8 @@ public class DialogueScript : MonoBehaviour
     public Button prefabButton;
     public GameObject endingScreen;
     public ArmReslingScript ARS;
-    public AudioClip clickSound, hoverSound;
+    public AudioClip clickSound;
+    public AudioClip backgroundMusic, reslingMusic;
     //public Animator Fade;
     [SerializeField]
     private List<TextAsset> inks;
@@ -90,19 +91,27 @@ public class DialogueScript : MonoBehaviour
     {
         story.ChooseChoiceIndex(0);
         dialogueText.text = story.currentText;
-        characterName.text = "Пиджак";
+        characterName.text = "Сеньор Пиджак";
         StopAllCoroutines();
         buttonLocation.gameObject.SetActive(true);
         DeleteButtons();
+        Camera.main.GetComponent<AudioSource>().Stop();
+        Camera.main.GetComponent<AudioSource>().loop = true;
+        Camera.main.GetComponent<AudioSource>().clip = backgroundMusic;
+        Camera.main.GetComponent<AudioSource>().Play();
     }
     public void SteveWinsArmresling()
     {
         story.ChooseChoiceIndex(1);
         dialogueText.text = story.currentText;
-        characterName.text = "Пиджак";
+        characterName.text = "Сеньор Пиджак";
         StopAllCoroutines();
         buttonLocation.gameObject.SetActive(true);
         DeleteButtons();
+        Camera.main.GetComponent<AudioSource>().Stop();
+        Camera.main.GetComponent<AudioSource>().loop = true;
+        Camera.main.GetComponent<AudioSource>().clip = backgroundMusic;
+        Camera.main.GetComponent<AudioSource>().Play();
     }
     void handleTag(List<string> currentTags)
     {
@@ -123,6 +132,8 @@ public class DialogueScript : MonoBehaviour
                 buttonLocation.gameObject.SetActive(false);
                 ARS.gameObject.SetActive(true);
                 ARS.StartFight();
+                Camera.main.GetComponent<AudioSource>().Stop();
+                Camera.main.GetComponent<AudioSource>().PlayOneShot(reslingMusic);
             }
         }
         if (currentTag.Contains("speaker"))
@@ -134,7 +145,7 @@ public class DialogueScript : MonoBehaviour
                     characterName.text = "Виталик Артас";
                     break;
                 case "speaker: Padge":
-                    characterName.text = "Пиджак";
+                    characterName.text = "Сеньор Пиджак";
                     break;
                 case "speaker: Shlepa":
                     characterTalkingSprite.sprite = shlepa;
@@ -171,11 +182,14 @@ public class DialogueScript : MonoBehaviour
                             ShowEndingScreen(friendGiga);
                             break;
                         case 3:
-                            ShowEndingScreen(friendShlepa);
+                            StartCoroutine(FinalEnding());
                             break;
                     }
-                    currentActor += 1;
-                    LoadStory(inks[currentActor]);
+                    if (currentActor < 3)
+                    {
+                        currentActor += 1;
+                        LoadStory(inks[currentActor]);
+                    }
                     break;
                 case "концовка плохая":
                     currentActor += 1;
@@ -189,19 +203,29 @@ public class DialogueScript : MonoBehaviour
             }
             if (currentActor == 3 && score == 0)
             {
-                ShowEndingScreen(badEnd);
-                SceneManager.LoadScene("Menu");
+                StartCoroutine(BadEnding());
             }
             else if (currentActor == 3 && score < 3)
             {
-                SceneManager.LoadScene("Menu");
+                SceneManager.LoadScene("Credits");
             }
             else if(currentActor==3&&score==3)
             {
-                currentActor += 1;
                 LoadStory(inks[currentActor]);
             }
         }
+    }
+    IEnumerator FinalEnding()
+    {
+        ShowEndingScreen(friendShlepa);
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("Credits");
+    }
+    IEnumerator BadEnding()
+    {
+        ShowEndingScreen(badEnd);
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("Credits");
     }
     public void ShowEndingScreen(Sprite sprite)
     {
@@ -215,7 +239,7 @@ public class DialogueScript : MonoBehaviour
         story.ChooseChoiceIndex(choice.index);
         DeleteButtons();
         dialogueText.text = choice.text;
-        characterName.text = "Пиджак";
+        characterName.text = "Сеньор Пиджак";
     }
     void DeleteButtons()
     {

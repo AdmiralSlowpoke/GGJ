@@ -25,6 +25,6 @@ public class MenuScript : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
         Camera.main.GetComponent<AudioSource>().PlayOneShot(sitSound);
         yield return new WaitForSeconds(1f);
-        SceneManager.LoadScene("game");
+        SceneManager.LoadScene("Intro");
     }
 }

@@ -1040,7 +1040,8 @@ MonoBehaviour:
   endingScreen: {fileID: 444649508}
   ARS: {fileID: 97462962}
   clickSound: {fileID: 8300000, guid: 45875f78d5ef2384f83634598c158908, type: 3}
-  hoverSound: {fileID: 8300000, guid: 45875f78d5ef2384f83634598c158908, type: 3}
+  backgroundMusic: {fileID: 8300000, guid: 1f22adcd8caab014c8ee235c479a5059, type: 3}
+  reslingMusic: {fileID: 8300000, guid: 38a9ec8a90671344cb0845cf313e188a, type: 3}
   inks:
   - {fileID: 4900000, guid: 763180759aab698419dd377c0ee4a989, type: 3}
   - {fileID: 4900000, guid: 7cdbb236375ff99488b180531e3c8757, type: 3}
