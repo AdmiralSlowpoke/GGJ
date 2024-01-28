@@ -19,9 +19,9 @@ public class ArmReslingScript : MonoBehaviour
 
     private int strength = 0;
     private float timer = 20f;
-    private bool pudgeVictory = false;
-    private bool steveVictory = false;
-    private void Start()
+    public bool pudgeVictory = false;
+    public bool steveVictory = false;
+    public void StartFight()
     {
         StartCoroutine(Timer());
     }
@@ -47,7 +47,9 @@ public class ArmReslingScript : MonoBehaviour
             {
                 pudgeHandImage.sprite = pudgeWin;
                 steveHandImage.gameObject.SetActive(false);
-                StopAllCoroutines();
+                pudgeVictory = true;
+                Camera.main.GetComponent<DialogueScript>().PudgeWinsArmsresling();
+                gameObject.SetActive(false);
             }
         }
     }
@@ -65,5 +67,7 @@ public class ArmReslingScript : MonoBehaviour
         if(timer<=0) steveVictory = true;
         pudgeHandImage.gameObject.SetActive(false);
         steveHandImage.sprite = pudgeCringe;
+        Camera.main.GetComponent<DialogueScript>().SteveWinsArmresling();
+        gameObject.SetActive(false);
     }
 }

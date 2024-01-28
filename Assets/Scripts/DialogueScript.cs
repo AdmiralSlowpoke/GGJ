@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Ink.Runtime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DialogueScript : MonoBehaviour
@@ -13,16 +14,47 @@ public class DialogueScript : MonoBehaviour
     public Story story;
     public GameObject buttonLocation;
     public Button prefabButton;
+    public GameObject endingScreen;
+    public ArmReslingScript ARS;
+    public AudioClip clickSound, hoverSound;
+    //public Animator Fade;
     [SerializeField]
-    private TextAsset ink = null;
+    private List<TextAsset> inks;
 
     [SerializeField]
     private Sprite padge,papets,steve,pikachu,shlepa;
+    [SerializeField]
+    private Sprite badEnd, friendPapets, friendShlepa, friendGiga, friendSteve, jail;
 
+    private int score = 0;
+    private int currentActor = 0;
     private bool textRunning = false;
     public void Start()
     {
-        story = new Story(ink.text);
+        LoadStory(inks[0]);
+    }
+    public void LoadStory(TextAsset textAsset)
+    {
+        StopAllCoroutines();
+        story = new Story(textAsset.text);
+        string text = story.Continue();
+        text = text.Trim();
+        StartCoroutine(AppearingText(text));
+        if (story.currentTags.Count > 0) handleTag(story.currentTags);
+        if (story.currentChoices.Count > 0)
+        {
+            for (int i = 0; i < story.currentChoices.Count; i++)
+            {
+                Choice choice = story.currentChoices[i];
+                Button button = Instantiate(prefabButton) as Button;
+                button.transform.SetParent(buttonLocation.transform);
+                button.GetComponentInChildren<TextMeshProUGUI>().text = choice.text;
+                button.onClick.AddListener(delegate
+                {
+                    OnClickChoiseButton(choice);
+                });
+            }
+        }
     }
     public void Update()
     {
@@ -32,7 +64,7 @@ public class DialogueScript : MonoBehaviour
             text = text.Trim();
             StartCoroutine(AppearingText(text));
             if (story.currentTags.Count > 0) handleTag(story.currentTags);
-            if (story.currentChoices.Count > 0)
+            if (story.currentChoices.Count > 0&& buttonLocation.transform.childCount==0)
             {
                 for(int i = 0; i < story.currentChoices.Count; i++)
                 {
@@ -54,14 +86,44 @@ public class DialogueScript : MonoBehaviour
             textRunning = false;
         }
     }
+    public void PudgeWinsArmsresling()
+    {
+        story.ChooseChoiceIndex(0);
+        dialogueText.text = story.currentText;
+        characterName.text = "Пиджак";
+        StopAllCoroutines();
+        buttonLocation.gameObject.SetActive(true);
+        DeleteButtons();
+    }
+    public void SteveWinsArmresling()
+    {
+        story.ChooseChoiceIndex(1);
+        dialogueText.text = story.currentText;
+        characterName.text = "Пиджак";
+        StopAllCoroutines();
+        buttonLocation.gameObject.SetActive(true);
+        DeleteButtons();
+    }
     void handleTag(List<string> currentTags)
     {
         string currentTag = "";
+        string endingTag = "";
         foreach(string tag in currentTags)
         {
-            if (tag.Contains("speaker") || tag.Contains("концовка"))
+            if (tag.Contains("speaker"))
+            {
                 currentTag = tag;
-            else if (tag.Contains("sound")) Debug.Log(tag);
+            }
+            else if (tag.Contains("концовка"))
+            {
+                endingTag = tag;
+            }
+            else if (tag.Contains("армрестлинг")) {
+
+                buttonLocation.gameObject.SetActive(false);
+                ARS.gameObject.SetActive(true);
+                ARS.StartFight();
+            }
         }
         if (currentTag.Contains("speaker"))
         {
@@ -91,16 +153,65 @@ public class DialogueScript : MonoBehaviour
                     break;
             }
         }
-        else if (currentTag.Contains("концовка"))
+        if (endingTag.Contains("концовка"))
         {
-            /*switch (currentTag)
+            switch (endingTag)
             {
-                case ""
-            }*/
+                case "концовка хорошая":
+                    score += 1;
+                    switch (currentActor)
+                    {
+                        case 0:
+                            ShowEndingScreen(friendPapets);
+                            break;
+                        case 1:
+                            ShowEndingScreen(friendSteve);
+                            break;
+                        case 2:
+                            ShowEndingScreen(friendGiga);
+                            break;
+                        case 3:
+                            ShowEndingScreen(friendShlepa);
+                            break;
+                    }
+                    currentActor += 1;
+                    LoadStory(inks[currentActor]);
+                    break;
+                case "концовка плохая":
+                    currentActor += 1;
+                    LoadStory(inks[currentActor]);
+                    break;
+                case "концовка полиция":
+                    ShowEndingScreen(jail);
+                    currentActor += 1;
+                    LoadStory(inks[currentActor]);
+                    break;
+            }
+            if (currentActor == 3 && score == 0)
+            {
+                ShowEndingScreen(badEnd);
+                SceneManager.LoadScene("Menu");
+            }
+            else if (currentActor == 3 && score < 3)
+            {
+                SceneManager.LoadScene("Menu");
+            }
+            else if(currentActor==3&&score==3)
+            {
+                currentActor += 1;
+                LoadStory(inks[currentActor]);
+            }
         }
+    }
+    public void ShowEndingScreen(Sprite sprite)
+    {
+        endingScreen.transform.GetChild(0).gameObject.SetActive(true);
+        endingScreen.GetComponentInChildren<Image>().sprite = sprite;
+        endingScreen.GetComponent<Animator>().Play("EndingAnim");
     }
     void OnClickChoiseButton(Choice choice)
     {
+        Camera.main.GetComponent<AudioSource>().PlayOneShot(clickSound);
         story.ChooseChoiceIndex(choice.index);
         DeleteButtons();
         dialogueText.text = choice.text;
