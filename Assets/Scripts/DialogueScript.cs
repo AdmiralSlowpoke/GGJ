@@ -207,13 +207,18 @@ public class DialogueScript : MonoBehaviour
             }
             else if (currentActor == 3 && score < 3)
             {
-                SceneManager.LoadScene("Credits");
+                StartCoroutine(NormalEnding());
             }
             else if(currentActor==3&&score==3)
             {
                 LoadStory(inks[currentActor]);
             }
         }
+    }
+    IEnumerator NormalEnding()
+    {
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("Credits");
     }
     IEnumerator FinalEnding()
     {
